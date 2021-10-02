@@ -2,8 +2,6 @@
 {
     public class MovementResult
     {
-        public Position NewPostion { get; set; }
-
-        public bool HasCollidedWithCraterWall { get; set; }
+        public Position Position { get; set; }
     }
 }
