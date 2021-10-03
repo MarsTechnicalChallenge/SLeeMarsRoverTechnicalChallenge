@@ -1,15 +1,17 @@
-﻿using SLeeMarsRoverTechnicalChallenge.Enums;
+﻿using Microsoft.Extensions.DependencyInjection;
+using SLeeMarsRoverTechnicalChallenge.Enums;
+using SLeeMarsRoverTechnicalChallenge.Extensions;
+using SLeeMarsRoverTechnicalChallenge.Interfaces;
 using SLeeMarsRoverTechnicalChallenge.Models;
 using System;
 
 namespace HelloWorld
 {
-    public class Hello
+    public class Program
     {
-        static int NoOfCollisions = 0;
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
-
+            //The position the rover will start in
             var startingPosition = new Position
             {
                 XCoordinate = 1,
@@ -17,24 +19,33 @@ namespace HelloWorld
                 Direction = Direction.North
             };
 
-            Rover rover = new Rover(startingPosition.XCoordinate, startingPosition.YCoordinate, startingPosition.Direction);
+            var serviceProvider = new ServiceCollection()
+                .AddRoverDependencies()
+                .BuildServiceProvider();
+
+            var reportService = serviceProvider.GetService<IReportService>();
+
+            RoverLogic rover = new RoverLogic(reportService, startingPosition);
+
+            //Set of movements the rover will follow
             string movement = "FFLFFLFFFFF";
+
+            //Move the rover
             rover.Move(movement);
 
+            //Save all the reports for each individual movement
+            var report = reportService.Get();
 
-            var reports = rover.GetMovementReports();
-            Console.WriteLine(movement.Length);
-            foreach(var report in reports.roverMovements)
+            //Display number of total collisions
+            Console.WriteLine($"Number of collisions: {report.TotalNumberOfCollisions}");
+
+            //Iterate through each report, displayint the co-ordinates
+            foreach (var roverMovement in report.Positions)
             {
-                Console.WriteLine($"Rover has moved to: X{report.Position.XCoordinate} Y{report.Position.YCoordinate} facing {report.Position.Direction}");
+                Console.WriteLine($"Rover has moved to location: ({roverMovement.XCoordinate},{roverMovement.YCoordinate}) and is facing {roverMovement.Direction}");
             }
 
             Console.ReadLine();
         }
-
-        //static void rover_TheRoverHasCrashed(object sender, EventArgs e)
-        //{
-        //    NoOfCollisions++;
-        //}
     }
 }
