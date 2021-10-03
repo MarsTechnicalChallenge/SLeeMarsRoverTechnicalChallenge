@@ -33,10 +33,9 @@ namespace SLeeMarsRoverTechnicalChallenge.Tests
             //Act
             rover.Move("FLFRFFFRFFRR");
             var reports = _reportService.Get();
-            var noOfCollisions = reports.TotalNumberOfCollisions;
 
             //Assert
-            noOfCollisions.Should().Be(0);
+            reports.TotalNumberOfCollisions.Should().Be(0);
             reports.Positions.Last().Should().BeEquivalentTo(expectedPosition);
         }
 
@@ -51,10 +50,9 @@ namespace SLeeMarsRoverTechnicalChallenge.Tests
             //Act
             rover.Move("LFLLFFLFFFRFF");
             var reports = _reportService.Get();
-            var noOfCollisions = reports.TotalNumberOfCollisions;
-
+           
             //Assert
-            noOfCollisions.Should().Be(1);
+            reports.TotalNumberOfCollisions.Should().Be(1);
             reports.Positions.Last().Should().BeEquivalentTo(expectedPosition);
         }
 
@@ -69,10 +67,9 @@ namespace SLeeMarsRoverTechnicalChallenge.Tests
             //Act
             rover.Move("FLFLFLFRFRFRFRF");
             var reports = _reportService.Get();
-            var noOfCollisions = reports.TotalNumberOfCollisions;
 
             //Assert
-            noOfCollisions.Should().Be(0);
+            reports.TotalNumberOfCollisions.Should().Be(0);
             reports.Positions.Last().Should().BeEquivalentTo(expectedPosition);
         }
 
@@ -87,10 +84,9 @@ namespace SLeeMarsRoverTechnicalChallenge.Tests
             //Act
             rover.Move("FFLFFLFFFFF");
             var reports = _reportService.Get();
-            var noOfCollisions = reports.TotalNumberOfCollisions;
 
             //Assert
-            noOfCollisions.Should().Be(3);
+            reports.TotalNumberOfCollisions.Should().Be(3);
             reports.Positions.Last().Should().BeEquivalentTo(expectedPosition);
         }
     }
