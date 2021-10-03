@@ -45,7 +45,7 @@ on:
     branches: [ master ]
 
 jobs:
-
+  
   build:
 
     strategy:
@@ -65,6 +65,9 @@ jobs:
       with:
         fetch-depth: 0
 
+    - name: Restore packages
+      run: dotnet restore
+      
     # Install the .NET Core workload
     - name: Install .NET Core
       uses: actions/setup-dotnet@v1
@@ -78,5 +81,3 @@ jobs:
     # Execute all unit tests in the solution
     - name: Execute unit tests
       run: dotnet test
-
-   
