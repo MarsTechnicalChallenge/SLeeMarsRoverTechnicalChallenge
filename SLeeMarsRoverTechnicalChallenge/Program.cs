@@ -23,7 +23,7 @@ namespace HelloWorld
                 .AddRoverDependencies()
                 .BuildServiceProvider();
 
-            var reportService = serviceProvider.GetService<IReportService>();
+            var reportService = serviceProvider.GetService<IReportRepository>();
 
             RoverLogic rover = new RoverLogic(reportService, startingPosition);
 

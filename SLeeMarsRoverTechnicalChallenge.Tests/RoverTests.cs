@@ -11,7 +11,7 @@ namespace SLeeMarsRoverTechnicalChallenge.Tests
 {
     public class RoverTests
     {
-        private readonly IReportService _reportService;
+        private readonly IReportRepository _reportService;
 
         public RoverTests()
         {
@@ -19,7 +19,7 @@ namespace SLeeMarsRoverTechnicalChallenge.Tests
                    .AddRoverDependencies()
                    .BuildServiceProvider();
 
-            _reportService = serviceProvider.GetService<IReportService>();
+            _reportService = serviceProvider.GetService<IReportRepository>();
         }
 
         [Fact]

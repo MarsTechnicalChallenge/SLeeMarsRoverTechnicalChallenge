@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace SLeeMarsRoverTechnicalChallenge.Repositories
 {
-    public class ReportService : IReportService
+    public class ReportRepository : IReportRepository
     {
         private List<Position> positions = new List<Position>();
         private int totalNoOfCollisions;

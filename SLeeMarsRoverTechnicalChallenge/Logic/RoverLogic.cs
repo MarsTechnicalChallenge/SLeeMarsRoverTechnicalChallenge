@@ -9,9 +9,9 @@ namespace SLeeMarsRoverTechnicalChallenge.Models
         private int NoOfCollisions { get; set; }
         private Position LastPostition { get; set; }
         private Position StartingPosition { get; set; }
-        private readonly IReportService _reportService;
+        private readonly IReportRepository _reportService;
 
-        public RoverLogic(IReportService reportService, Position position)
+        public RoverLogic(IReportRepository reportService, Position position)
         {
             _reportService = reportService;
             StartingPosition = position;

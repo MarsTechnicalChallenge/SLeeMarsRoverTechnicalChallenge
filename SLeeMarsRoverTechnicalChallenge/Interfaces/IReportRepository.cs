@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace SLeeMarsRoverTechnicalChallenge.Interfaces
 {
-    public interface IReportService
+    public interface IReportRepository
     {
         (List<Position> Positions, int TotalNumberOfCollisions) Get();
 

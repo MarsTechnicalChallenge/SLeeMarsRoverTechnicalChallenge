@@ -9,7 +9,7 @@ namespace SLeeMarsRoverTechnicalChallenge.Extensions
         public static IServiceCollection AddRoverDependencies(this IServiceCollection services)
         {
             return services
-                 .AddSingleton<IReportService, ReportService>();
+                 .AddSingleton<IReportRepository, ReportRepository>();
         }
     }
 }
