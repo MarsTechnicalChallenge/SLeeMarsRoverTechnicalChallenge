@@ -1,18 +1,19 @@
 ﻿using SLeeMarsRoverTechnicalChallenge.Enums;
+using SLeeMarsRoverTechnicalChallenge.Interfaces;
 using System;
-using System.Collections.Generic;
 
 namespace SLeeMarsRoverTechnicalChallenge.Models
 {
-    public class Rover
+    public class RoverLogic
     {
         private int NoOfCollisions { get; set; }
         private Position LastPostition { get; set; }
         private Position StartingPosition { get; set; }
-        private List<RoverMovementReport> RoverMovementReports = new List<RoverMovementReport>();
+        private readonly IReportService _reportService;
 
-        public Rover(Position position) 
+        public RoverLogic(IReportService reportService, Position position)
         {
+            _reportService = reportService;
             StartingPosition = position;
         }
 
@@ -37,27 +38,21 @@ namespace SLeeMarsRoverTechnicalChallenge.Models
                         break;
                 }
 
-               if(!HasRoverGoneOffGrid())
-               {
-                    var roverMovementReport = new RoverMovementReport();
-                    roverMovementReport.Position = new Position { XCoordinate = StartingPosition.XCoordinate, Direction = StartingPosition.Direction, YCoordinate = StartingPosition.YCoordinate };
-                    RoverMovementReports.Add(roverMovementReport);
-               }
-            }
-        }
-
-        private bool HasRoverGoneOffGrid()
-        {
-            if (StartingPosition.XCoordinate < 0 || StartingPosition.XCoordinate >= 5 || StartingPosition.YCoordinate < 0 || StartingPosition.YCoordinate >= 5)
-            {
-                NoOfCollisions++;
-                StartingPosition.XCoordinate = LastPostition.XCoordinate;
-                StartingPosition.YCoordinate = LastPostition.YCoordinate;
-                StartingPosition.Direction = LastPostition.Direction;
-                return true;
+                if (StartingPosition.XCoordinate < 0 || StartingPosition.XCoordinate >= 5 || StartingPosition.YCoordinate < 0 || StartingPosition.YCoordinate >= 5)
+                {
+                    NoOfCollisions++;
+                    StartingPosition.XCoordinate = LastPostition.XCoordinate;
+                    StartingPosition.YCoordinate = LastPostition.YCoordinate;
+                    StartingPosition.Direction = LastPostition.Direction;
+                }
+                else
+                {
+                    var position = new Position { XCoordinate = StartingPosition.XCoordinate, Direction = StartingPosition.Direction, YCoordinate = StartingPosition.YCoordinate };
+                    _reportService.Add(position);
+                }
             }
 
-            return false;
+            _reportService.UpdateTotalNumberOfCollisions(NoOfCollisions);
         }
 
         private void MoveRoverLeft()
@@ -137,11 +132,6 @@ namespace SLeeMarsRoverTechnicalChallenge.Models
                 XCoordinate = StartingPosition.XCoordinate,
                 YCoordinate = StartingPosition.YCoordinate
             };
-        }
-
-        public (List<RoverMovementReport> roverMovements, int totalCollisions) GetMovementReports()
-        {
-            return (RoverMovementReports, NoOfCollisions);
         }
     }
 }
