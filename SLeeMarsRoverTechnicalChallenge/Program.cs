@@ -6,10 +6,9 @@ namespace HelloWorld
 {
     public class Hello
     {
-        static int NoOfCollisions = 0;
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
-
+            //Position the rover will start in
             var startingPosition = new Position
             {
                 XCoordinate = 1,
@@ -17,24 +16,27 @@ namespace HelloWorld
                 Direction = Direction.North
             };
 
-            Rover rover = new Rover(startingPosition.XCoordinate, startingPosition.YCoordinate, startingPosition.Direction);
+            Rover rover = new Rover(startingPosition);
+
+            //Set of movements the rover will follow
             string movement = "FFLFFLFFFFF";
+
+            //Move the rover
             rover.Move(movement);
 
+            //Save all the reports for each individual movement
+            var report = rover.GetMovementReports();
 
-            var reports = rover.GetMovementReports();
-            Console.WriteLine(movement.Length);
-            foreach(var report in reports.roverMovements)
+            //Display number of total collisions
+            Console.WriteLine($"Number of collisions: {report.totalCollisions}");
+
+            //Iterate through each report, displayint the co-ordinates
+            foreach (var roverMovement in report.roverMovements)
             {
-                Console.WriteLine($"Rover has moved to: X{report.Position.XCoordinate} Y{report.Position.YCoordinate} facing {report.Position.Direction}");
+                Console.WriteLine($"Rover has moved to location: ({roverMovement.Position.XCoordinate},{roverMovement.Position.YCoordinate}) and is facing {roverMovement.Position.Direction}");
             }
 
             Console.ReadLine();
         }
-
-        //static void rover_TheRoverHasCrashed(object sender, EventArgs e)
-        //{
-        //    NoOfCollisions++;
-        //}
     }
 }

@@ -6,27 +6,22 @@ namespace SLeeMarsRoverTechnicalChallenge.Models
 {
     public class Rover
     {
-        private int XCoordinate { get; set; }
-        private int YCoordinate { get; set; }
-        private Direction CompassPoint { get; set; }
         private int NoOfCollisions { get; set; }
-        private Position LastKnown { get; set; }
-
+        private Position LastPostition { get; set; }
+        private Position StartingPosition { get; set; }
         private List<RoverMovementReport> RoverMovementReports = new List<RoverMovementReport>();
 
-        public Rover(int xCoordinate, int yCoordinate, Direction compassPoint)
+        public Rover(Position position) 
         {
-            XCoordinate = xCoordinate;
-            YCoordinate = yCoordinate;
-            CompassPoint = compassPoint;
+            StartingPosition = position;
         }
 
         public void Move(string movements)
         {
             foreach (var movement in movements)
             {
-
                 SavePosition();
+
                 switch (Enum.Parse<MovementInstruction>(movement.ToString()))
                 {
                     case MovementInstruction.L:
@@ -42,64 +37,69 @@ namespace SLeeMarsRoverTechnicalChallenge.Models
                         break;
                 }
 
-                if (XCoordinate < 0 || XCoordinate >=5 || YCoordinate < 0 || YCoordinate >=5)
-                {
-                    NoOfCollisions++;
-                    XCoordinate = LastKnown.XCoordinate;
-                    YCoordinate = LastKnown.YCoordinate;
-                    CompassPoint = LastKnown.Direction;
-                    
-                }
-                else
-                {
+               if(!HasRoverGoneOffGrid())
+               {
                     var roverMovementReport = new RoverMovementReport();
-                    roverMovementReport.Position = new Position { XCoordinate = XCoordinate, Direction = CompassPoint, YCoordinate = YCoordinate };
+                    roverMovementReport.Position = new Position { XCoordinate = StartingPosition.XCoordinate, Direction = StartingPosition.Direction, YCoordinate = StartingPosition.YCoordinate };
                     RoverMovementReports.Add(roverMovementReport);
-                }
-
+               }
             }
+        }
+
+        private bool HasRoverGoneOffGrid()
+        {
+            if (StartingPosition.XCoordinate < 0 || StartingPosition.XCoordinate >= 5 || StartingPosition.YCoordinate < 0 || StartingPosition.YCoordinate >= 5)
+            {
+                NoOfCollisions++;
+                StartingPosition.XCoordinate = LastPostition.XCoordinate;
+                StartingPosition.YCoordinate = LastPostition.YCoordinate;
+                StartingPosition.Direction = LastPostition.Direction;
+                return true;
+            }
+
+            return false;
         }
 
         private void MoveRoverLeft()
         {
-            switch (CompassPoint)
+            switch (StartingPosition.Direction)
             {
                 case Direction.North:
-                    CompassPoint = Direction.West;
+                    StartingPosition.Direction = Direction.West;
                     break;
 
                 case Direction.West:
-                    CompassPoint = Direction.South;
+                    StartingPosition.Direction = Direction.South;
                     break;
 
                 case Direction.South:
-                    CompassPoint = Direction.East;
+                    StartingPosition.Direction = Direction.East;
                     break;
 
                 case Direction.East:
-                    CompassPoint = Direction.North;
+                    StartingPosition.Direction = Direction.North;
                     break;
             }
         }
 
         private void MoveRoverRight()
         {
-            switch (CompassPoint)
+            switch (StartingPosition.Direction)
             {
                 case Direction.North:
-                    CompassPoint = Direction.East;
+                    StartingPosition.Direction = Direction.East;
                     break;
 
                 case Direction.East:
-                    CompassPoint = Direction.South;
+                    StartingPosition.Direction = Direction.South;
                     break;
 
                 case Direction.South:
-                    CompassPoint = Direction.West;
+                    StartingPosition.Direction = Direction.West;
                     break;
 
                 case Direction.West:
-                    CompassPoint = Direction.North;
+                    StartingPosition.Direction = Direction.North;
                     break;
 
                 default:
@@ -107,39 +107,39 @@ namespace SLeeMarsRoverTechnicalChallenge.Models
             }
         }
 
-        private void SavePosition()
-        {
-            LastKnown = new Position
-            {
-                Direction = CompassPoint,
-                XCoordinate = XCoordinate,
-                YCoordinate = YCoordinate
-            };
-        }
-
         private void MoveRoverForward()
         {
-            switch (CompassPoint)
+            switch (StartingPosition.Direction)
             {
                 case Direction.North:
-                    YCoordinate += 1;
+                    StartingPosition.YCoordinate += 1;
                     break;
 
                 case Direction.East:
-                    XCoordinate += 1;
+                    StartingPosition.XCoordinate += 1;
                     break;
 
                 case Direction.South:
-                    YCoordinate -= 1;
+                    StartingPosition.YCoordinate -= 1;
                     break;
 
                 case Direction.West:
-                    XCoordinate -= 1;
+                    StartingPosition.XCoordinate -= 1;
                     break;
             }
         }
 
-        public (List<RoverMovementReport> roverMovements, int noOfCollisions) GetMovementReports()
+        private void SavePosition()
+        {
+            LastPostition = new Position
+            {
+                Direction = StartingPosition.Direction,
+                XCoordinate = StartingPosition.XCoordinate,
+                YCoordinate = StartingPosition.YCoordinate
+            };
+        }
+
+        public (List<RoverMovementReport> roverMovements, int totalCollisions) GetMovementReports()
         {
             return (RoverMovementReports, NoOfCollisions);
         }
