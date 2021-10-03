@@ -6,6 +6,6 @@ namespace SLeeMarsRoverTechnicalChallenge.Models
     {
         public int XCoordinate { get; set; }
         public int YCoordinate { get; set; }
-        public CompassPoint Direction { get; set; }
+        public Direction Direction { get; set; }
     }
 }

@@ -6,15 +6,15 @@ namespace SLeeMarsRoverTechnicalChallenge.Models
 {
     public class Rover
     {
-        private static int XCoordinate { get; set; }
-        private static int YCoordinate { get; set; }
-        private static CompassPoint CompassPoint { get; set; }
-        private static int NoOfCollisions { get; set; }
-        private static Position LastKnown { get; set; }
+        private int XCoordinate { get; set; }
+        private int YCoordinate { get; set; }
+        private Direction CompassPoint { get; set; }
+        private int NoOfCollisions { get; set; }
+        private Position LastKnown { get; set; }
 
-        private static List<RoverMovementReport> RoverMovementReports = new List<RoverMovementReport>();
+        private List<RoverMovementReport> RoverMovementReports = new List<RoverMovementReport>();
 
-        public Rover(int xCoordinate, int yCoordinate, CompassPoint compassPoint)
+        public Rover(int xCoordinate, int yCoordinate, Direction compassPoint)
         {
             XCoordinate = xCoordinate;
             YCoordinate = yCoordinate;
@@ -23,9 +23,6 @@ namespace SLeeMarsRoverTechnicalChallenge.Models
 
         public void Move(string movements)
         {
-
-           // SavePosition();
-
             foreach (var movement in movements)
             {
 
@@ -45,12 +42,13 @@ namespace SLeeMarsRoverTechnicalChallenge.Models
                         break;
                 }
 
-                if (XCoordinate < 0 || XCoordinate > 5 || YCoordinate <= 0 || YCoordinate > 5)
+                if (XCoordinate < 0 || XCoordinate >=5 || YCoordinate < 0 || YCoordinate >=5)
                 {
                     NoOfCollisions++;
                     XCoordinate = LastKnown.XCoordinate;
                     YCoordinate = LastKnown.YCoordinate;
                     CompassPoint = LastKnown.Direction;
+                    
                 }
                 else
                 {
@@ -66,20 +64,20 @@ namespace SLeeMarsRoverTechnicalChallenge.Models
         {
             switch (CompassPoint)
             {
-                case CompassPoint.North:
-                    CompassPoint = CompassPoint.West;
+                case Direction.North:
+                    CompassPoint = Direction.West;
                     break;
 
-                case CompassPoint.West:
-                    CompassPoint = CompassPoint.South;
+                case Direction.West:
+                    CompassPoint = Direction.South;
                     break;
 
-                case CompassPoint.South:
-                    CompassPoint = CompassPoint.East;
+                case Direction.South:
+                    CompassPoint = Direction.East;
                     break;
 
-                case CompassPoint.East:
-                    CompassPoint = CompassPoint.North;
+                case Direction.East:
+                    CompassPoint = Direction.North;
                     break;
             }
         }
@@ -88,20 +86,20 @@ namespace SLeeMarsRoverTechnicalChallenge.Models
         {
             switch (CompassPoint)
             {
-                case CompassPoint.North:
-                    CompassPoint = CompassPoint.East;
+                case Direction.North:
+                    CompassPoint = Direction.East;
                     break;
 
-                case CompassPoint.East:
-                    CompassPoint = CompassPoint.South;
+                case Direction.East:
+                    CompassPoint = Direction.South;
                     break;
 
-                case CompassPoint.South:
-                    CompassPoint = CompassPoint.West;
+                case Direction.South:
+                    CompassPoint = Direction.West;
                     break;
 
-                case CompassPoint.West:
-                    CompassPoint = CompassPoint.North;
+                case Direction.West:
+                    CompassPoint = Direction.North;
                     break;
 
                 default:
@@ -109,7 +107,7 @@ namespace SLeeMarsRoverTechnicalChallenge.Models
             }
         }
 
-        private static void SavePosition()
+        private void SavePosition()
         {
             LastKnown = new Position
             {
@@ -119,23 +117,23 @@ namespace SLeeMarsRoverTechnicalChallenge.Models
             };
         }
 
-        private static void MoveRoverForward()
+        private void MoveRoverForward()
         {
             switch (CompassPoint)
             {
-                case CompassPoint.North:
+                case Direction.North:
                     YCoordinate += 1;
                     break;
 
-                case CompassPoint.East:
+                case Direction.East:
                     XCoordinate += 1;
                     break;
 
-                case CompassPoint.South:
+                case Direction.South:
                     YCoordinate -= 1;
                     break;
 
-                case CompassPoint.West:
+                case Direction.West:
                     XCoordinate -= 1;
                     break;
             }

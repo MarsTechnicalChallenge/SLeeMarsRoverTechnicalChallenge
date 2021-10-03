@@ -1,6 +1,6 @@
 ﻿namespace SLeeMarsRoverTechnicalChallenge.Enums
 {
-    public enum CompassPoint
+    public enum Direction
     {
         North,
         East,

@@ -1,7 +1,6 @@
 ﻿using SLeeMarsRoverTechnicalChallenge.Enums;
 using SLeeMarsRoverTechnicalChallenge.Models;
 using System;
-using System.Linq;
 
 namespace HelloWorld
 {
@@ -15,12 +14,11 @@ namespace HelloWorld
             {
                 XCoordinate = 1,
                 YCoordinate = 3,
-                Direction = CompassPoint.North
+                Direction = Direction.North
             };
 
             Rover rover = new Rover(startingPosition.XCoordinate, startingPosition.YCoordinate, startingPosition.Direction);
-            string movement = "LFLLFFLFFFRFF";
-            //rover.TheRoverHasCrashed += rover_TheRoverHasCrashed;
+            string movement = "FFLFFLFFFFF";
             rover.Move(movement);
 
 
