@@ -50,7 +50,7 @@ namespace SLeeMarsRoverTechnicalChallenge.Tests
             //Act
             rover.Move("LFLLFFLFFFRFF");
             var reports = _reportService.Get();
-           
+
             //Assert
             reports.TotalNumberOfCollisions.Should().Be(1);
             reports.Positions.Last().Should().BeEquivalentTo(expectedPosition);
